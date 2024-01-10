@@ -1,8 +1,8 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { Get, HttpException, Injectable, Param } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import { CreateUserDto } from '../dto/create-user.dto';
-// import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdateUserDto } from '../dto/update-user.dto';
 import { User } from '../entities/user.entity';
 
 @Injectable()
@@ -23,12 +23,10 @@ export class UsersService {
    */
   createUser(createUserDto: CreateUserDto): Promise<User> {
     try {
-      const user: User = new User();
-      user.name = createUserDto.name;
-      user.age = createUserDto.age;
-      user.email = createUserDto.email;
-      user.password = createUserDto.password;
-      user.gender = createUserDto.gender;
+      const user: CreateUserDto = {
+        ...createUserDto,
+        password: createUserDto.password  
+      };
       return this.userRepository.save(user);
       
     } catch (error) {
@@ -49,8 +47,12 @@ export class UsersService {
    * @param id is type of number, which represent the id of user.
    * @returns promise of user
    */
-  viewUser(email: string): Promise<User> {
-    return this.userRepository.findOneBy({ email });
+  async findById(id: string): Promise<User> {
+    return this.userRepository.findOneBy({ id });
+  }
+
+  findByUsername(username: string): Promise<User> {
+    return this.userRepository.findOneBy({ username });
   }
 
   /**
@@ -60,15 +62,13 @@ export class UsersService {
    * @param updateUserDto this is partial type of createUserDto.
    * @returns promise of udpate user
    */
-  // updateUser(id: number, updateUserDto: UpdateUserDto): Promise<User> {
-  //   const user: User = new User();
-  //   user.name = updateUserDto.name;
-  //   user.age = updateUserDto.age;
-  //   user.email = updateUserDto.email;
-  //   user.password = updateUserDto.password;
-  //   user.id = id;
-  //   return this.userRepository.save(user);
-  // }
+  updateUser(id: string, updateUserDto: UpdateUserDto): Promise<UpdateResult> {
+    const user: UpdateUserDto = {
+      ...updateUserDto,
+    };
+    return this.userRepository.update(id, user);
+
+  }
 
   /**
    * this function is used to remove or delete user from database.

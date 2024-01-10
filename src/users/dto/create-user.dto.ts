@@ -7,16 +7,29 @@ import {
   IsString,
   Matches,
   MinLength,
+  Validate,
 } from 'class-validator';
+import { Unique } from 'typeorm';
+// import { Category } from './category.entity';
+
 
 const passwordRegEx =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[@$!%*?&])[A-Za-zd@$!%*?&]{8,20}$/;
 
 export class CreateUserDto {
+
+  id?: string;
+
   @IsString()
   @MinLength(2, { message: 'Name must have atleast 2 characters.' })
   @IsNotEmpty()
   name: string;
+
+  @IsString()
+  // @Validate(Unique, [Category])
+  @MinLength(2, { message: 'Username must have atleast 2 characters.' })
+  @IsNotEmpty()
+  username: string;
 
   @IsNotEmpty()
   @IsEmail(null, { message: 'Please provide valid Email.' })
@@ -39,4 +52,7 @@ export class CreateUserDto {
   @IsEnum(['f', 'm'])
   gender: string;
 
+  @IsString()
+  refreshToken?: string;
 }
+

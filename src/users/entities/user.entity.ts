@@ -5,19 +5,22 @@ export class User {
   /**
    * this decorator will help to auto generate id for the table.
    */
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id?: string;
 
-  @Column({ type: 'varchar', length: 30 })
+  @Column({ type: 'text' })
   name: string;
 
-  @Column({ type: 'varchar', length: 40 })
+  @Column({ type: 'text' })
+  username: string;
+
+  @Column({ type: 'text'})
   email: string;
 
   @Column({ type: 'int' })
   age: number;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'text' })
   password: string;
 
   @Column({ type: 'enum', enum: ['m', 'f'] })

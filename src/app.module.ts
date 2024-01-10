@@ -5,21 +5,26 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersController } from './users/controllers/users.controller';
 import { UsersService } from './users/services/users.service';
 import { User } from './users/entities/user.entity';
+import { AuthModule } from './auth/modules/auth.module';
+import { ConfigModule } from '@nestjs/config';
+import { AuthController } from './auth/controllers/auth.controller';
+
 
 @Module({
-  imports: [CacheModule.register(),
+  imports: [ConfigModule.forRoot(), CacheModule.register(),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
       port: 5432,
       password: '3.14159',
-      username: 'postgres',
+      username: 'admin',
       entities: [User],
       database: 'users',
       synchronize: true,
       logging: true,
     }),
-    UsersModule
+    UsersModule,
+    AuthModule
   ],
   controllers: [UsersController],
   providers: [],

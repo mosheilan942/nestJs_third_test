@@ -3,6 +3,7 @@ import { UsersService } from '../services/users.service';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
 import { HttpExceptionFilter } from '../errors/http-exception.filter';
+import { UpdateUserDto } from '../dto/update-user.dto';
 
 /**
  * whatever the string pass in controller decorator it will be appended to
@@ -24,7 +25,7 @@ export class UsersController {
 
     @Get()
     viewUser(@Body() createUserDto: CreateUserDto) {
-        return this.usersService.viewUser(createUserDto.email);
+        return this.usersService.findByUsername(createUserDto.username);
     }
 
     /**
@@ -34,11 +35,11 @@ export class UsersController {
    * POST http://localhost:3000/user
    */
 
-    @Post()
-    @UseFilters(new HttpExceptionFilter)
+    @Post('signup')
+    // @UseFilters(new HttpExceptionFilter)
     create(@Body() createUserDto: CreateUserDto) {
-        throw new ForbiddenException();
-        // this.usersService.createUser(createUserDto);
+        // throw new ForbiddenException();
+        this.usersService.createUser(createUserDto);
     }
 
     /**
@@ -57,8 +58,8 @@ export class UsersController {
      * GET http://localhost:3000/user/:id
      */
     @Get(':id')
-    findOne(@Param('email') email: string) {
-        return this.usersService.viewUser(email);
+    findOne(@Param('id') id: string) {
+        return this.usersService.findById(id);
     }
 
     /**
@@ -66,10 +67,10 @@ export class UsersController {
      * so the API URL will be
      * PATCH http://localhost:3000/user/:id
      */
-    // @Patch(':id')
-    // update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    //     return this.usersService.updateUser(+id, updateUserDto);
-    // }
+    @Patch(':id')
+    update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+        return this.usersService.updateUser(id, updateUserDto);
+    }
 
     /**
      * we have used Delete decorator with id param to get id from request
@@ -79,6 +80,6 @@ export class UsersController {
 
     @Delete(':id')
     remove(@Param('id') id: string) {
-        return this.usersService.removeUser(+id);
+        return this.usersService.removeUser(Number(id));
     }
 }
