@@ -17,7 +17,7 @@ import { AuthController } from './auth/controllers/auth.controller';
       host: 'localhost',
       port: 5432,
       password: '3.14159',
-      username: 'admin',
+      username: 'postgres',
       entities: [User],
       database: 'users',
       synchronize: true,
