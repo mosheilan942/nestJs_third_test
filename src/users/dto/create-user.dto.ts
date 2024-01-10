@@ -19,24 +19,16 @@ const passwordRegEx =
 
 export class CreateUserDto {
 
-  id?: string;
-
   @IsString()
-  @MinLength(2, { message: 'Name must have atleast 2 characters.' })
-  @IsNotEmpty()
-  name: string;
-
-  @IsString()
-  @MinLength(2, { message: 'Username must have atleast 2 characters.' })
+  @MinLength(4, { message: 'Username must have atleast 4 characters.' })
   @IsNotEmpty()
   username: string;
 
-  // @IsNotEmpty()
-  // @IsEmail(null, { message: 'Please provide valid Email.' })
-  // email: string;
-
-  @IsInt()
-  age: number;
+  @IsEmail()
+  @Matches(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/, {
+    message: 'email must be a valid email',
+  })
+  email: string;
   
   @IsNotEmpty()
   @Matches(passwordRegEx, {
@@ -48,12 +40,5 @@ export class CreateUserDto {
   })
   password: string;
   
-  @IsString()
-  @IsEnum(['f', 'm'])
-  gender: string;
-
-  @IsString()
-  @IsOptional()
-  refreshToken?: string;
 }
 

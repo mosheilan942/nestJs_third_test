@@ -1,4 +1,4 @@
-import { Get, HttpException, Injectable, Param } from '@nestjs/common';
+import { Get, HttpException, HttpStatus, Injectable, Param } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult } from 'typeorm';
 import { CreateUserDto } from '../dto/create-user.dto';
@@ -13,45 +13,33 @@ export class UsersService {
    */
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
-  ) {}
+  ) { }
 
-  /**
-   * this is function is used to create User in User Entity.
-   * @param createUserDto this will type of createUserDto in which
-   * we have defined what are the keys we are expecting from body
-   * @returns promise of user
-   */
   createUser(createUserDto: CreateUserDto): Promise<User> {
+    const checkIfExist = this.findByUsername(createUserDto.username)
+    if (checkIfExist) 
+    throw new HttpException('user already exist', HttpStatus.OK)
     try {
       const user: CreateUserDto = {
         ...createUserDto,
-        password: createUserDto.password  
+        password: createUserDto.password
       };
       return this.userRepository.save(user);
-      
+
     } catch (error) {
       throw new HttpException('Forbidden', error);
     }
   }
 
-  /**
-   * this function is used to get all the user's list
-   * @returns promise of array of users
-   */
   findAllUser(): Promise<User[]> {
     return this.userRepository.find();
   }
 
-  /**
-   * this function used to get data of use whose id is passed in parameter
-   * @param id is type of number, which represent the id of user.
-   * @returns promise of user
-   */
   async findById(id: string): Promise<User> {
     return this.userRepository.findOneBy({ id });
   }
 
-  findByUsername(username: string): Promise<User> {
+  async findByUsername(username: string): Promise<User> {
     return this.userRepository.findOneBy({ username });
   }
 
@@ -75,7 +63,7 @@ export class UsersService {
    * @param id is the type of number, which represent id of user
    * @returns nuber of rows deleted or affected
    */
-  removeUser(id: number): Promise<{ affected?: number }> {
+  removeUser(id: string): Promise<{ affected?: number }> {
     return this.userRepository.delete(id);
   }
 }
