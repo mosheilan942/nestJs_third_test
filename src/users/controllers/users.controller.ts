@@ -1,9 +1,11 @@
-import { Controller, Post, Body, Get, UseInterceptors, Patch, Param, Delete, UseFilters, ForbiddenException } from '@nestjs/common';
+import { Controller, Post, Body, Get, UseInterceptors, Patch, Param, Delete, UseFilters, ForbiddenException, UseGuards } from '@nestjs/common';
 import { UsersService } from '../services/users.service';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
 import { HttpExceptionFilter } from '../errors/http-exception.filter';
 import { UpdateUserDto } from '../dto/update-user.dto';
+import { log } from 'console';
+import { AccessTokenGuard } from 'src/common/guards/accessToken.guard';
 
 /**
  * whatever the string pass in controller decorator it will be appended to
@@ -25,7 +27,9 @@ export class UsersController {
 
     @Get()
     viewUser(@Body() createUserDto: CreateUserDto) {
-        return this.usersService.findByUsername(createUserDto.username);
+        console.log("hi from viewuser");
+        // return this.usersService.findByUsername(createUserDto.username);
+        
     }
 
     /**
@@ -47,8 +51,9 @@ export class UsersController {
      * so the API URL will be
      * GET http://localhost:3000/user
      */
-    @Get()
+    @Get('allusers')
     findAll() {
+        console.log("hi from findall"); 
         return this.usersService.findAllUser();
     }
 
@@ -61,12 +66,13 @@ export class UsersController {
     findOne(@Param('id') id: string) {
         return this.usersService.findById(id);
     }
-
+ 
     /**
      * we have used patch decorator with id param to get id from request
      * so the API URL will be
      * PATCH http://localhost:3000/user/:id
      */
+    @UseGuards(AccessTokenGuard)
     @Patch(':id')
     update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
         return this.usersService.updateUser(id, updateUserDto);
@@ -78,6 +84,7 @@ export class UsersController {
      * DELETE http://localhost:3000/user/:id
      */
 
+    @UseGuards(AccessTokenGuard)
     @Delete(':id')
     remove(@Param('id') id: string) {
         return this.usersService.removeUser(Number(id));

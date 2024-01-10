@@ -29,4 +29,7 @@ export class User {
    * m - male
    * f - female
    */
+
+  @Column({ type: 'text', default:"", nullable:true })
+  refreshToken: string;
 }

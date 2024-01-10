@@ -33,6 +33,7 @@ export class AuthService {
     return tokens;
   }
 
+  
 	async signIn(data: AuthDto) {
     // Check if user exists
     const user = await this.usersService.findByUsername(data.username);

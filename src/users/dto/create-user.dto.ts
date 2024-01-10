@@ -1,20 +1,21 @@
+import { defaults } from 'argon2';
 import {
-  IsAlphanumeric,
   IsEmail,
   IsEnum,
   IsInt,
   IsNotEmpty,
+  IsOptional,
   IsString,
   Matches,
-  MinLength,
-  Validate,
+  MinLength
 } from 'class-validator';
-import { Unique } from 'typeorm';
+// import { defaultIfEmpty, from } from 'rxjs';
+// import { Unique } from 'typeorm';
 // import { Category } from './category.entity';
 
 
 const passwordRegEx =
-  /^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[@$!%*?&])[A-Za-zd@$!%*?&]{8,20}$/;
+/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[\w!@#$%^&*]{8,20}$/;
 
 export class CreateUserDto {
 
@@ -26,14 +27,13 @@ export class CreateUserDto {
   name: string;
 
   @IsString()
-  // @Validate(Unique, [Category])
   @MinLength(2, { message: 'Username must have atleast 2 characters.' })
   @IsNotEmpty()
   username: string;
 
-  @IsNotEmpty()
-  @IsEmail(null, { message: 'Please provide valid Email.' })
-  email: string;
+  // @IsNotEmpty()
+  // @IsEmail(null, { message: 'Please provide valid Email.' })
+  // email: string;
 
   @IsInt()
   age: number;
@@ -53,6 +53,7 @@ export class CreateUserDto {
   gender: string;
 
   @IsString()
+  @IsOptional()
   refreshToken?: string;
 }
 
