@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity('users')
 export class User {
   /**
    * this decorator will help to auto generate id for the table.
@@ -8,13 +8,13 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'text', nullable:true})
+  @Column({ type: 'text', nullable:true, unique:true})
   email: string;
   
   @Column({ type: 'text', nullable:true })
   password: string;
 
-  @Column({ type: 'text', nullable:true })
+  @Column({ type: 'text', nullable:true, unique:true })
   username: string;
   
   // @Column({ type: 'text' })

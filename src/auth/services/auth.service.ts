@@ -11,7 +11,6 @@ const JWT_ACCESS_SECRET = "Ab3o7fU1Jfj4DaIDRuMvm6k8YU//00cqTJAocAstp5PBKQtzEUVRQ
 export class AuthService {
   constructor(
     private jwtService: JwtService,
-    private readonly jwtServ: JwtService,
     private usersService: UsersService,
   ) { }
 
@@ -27,7 +26,7 @@ export class AuthService {
   }
 
   validateToken(token: string) {
-    return this.jwtServ.verify(token, {
+    return this.jwtService.verify(token, {
         secret : process.env.JWT_SECRET_KEY
     });
 }

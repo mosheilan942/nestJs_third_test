@@ -15,8 +15,8 @@ export class UsersService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) { }
 
-  createUser(createUserDto: CreateUserDto): Promise<User> {
-    const checkIfExist = this.findByUsername(createUserDto.username)
+  async createUser(createUserDto: CreateUserDto): Promise<User> {
+    const checkIfExist = await this.findByUsername(createUserDto.username)
     if (checkIfExist) 
     throw new HttpException('user already exist', HttpStatus.OK)
     try {
