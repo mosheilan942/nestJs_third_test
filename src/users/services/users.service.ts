@@ -1,4 +1,11 @@
-import { Get, HttpException, HttpStatus, Injectable, Param } from '@nestjs/common';
+import {
+  BadRequestException,
+  Get,
+  HttpException,
+  HttpStatus,
+  Injectable,
+  Param,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult } from 'typeorm';
 import { CreateUserDto } from '../dto/create-user.dto';
@@ -8,27 +15,23 @@ import { hashPassword } from '../utils/hash';
 
 @Injectable()
 export class UsersService {
-  
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
-  ) { }
+  ) {}
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
-    const checkIfExist = await this.findByUsername(createUserDto.username)
-    console.log("checkIfExist", checkIfExist);
-    if (checkIfExist) 
-    throw new HttpException('user already exist', HttpStatus.OK)
     try {
+      const checkIfExist = await this.findByEmail(createUserDto.email);
+      if (checkIfExist) throw new BadRequestException('user already exist');
       const user: CreateUserDto = {
         ...createUserDto,
-        password: createUserDto.password
+        password: createUserDto.password,
       };
-      const hash = hashPassword(user.password)
-      user.password = await hash
+      const hash = hashPassword(user.password);
+      user.password = await hash;
       return this.userRepository.save(user);
-
     } catch (error) {
-      throw new HttpException('Forbidden', error);
+      return Promise.reject(error);
     }
   }
 
@@ -40,8 +43,8 @@ export class UsersService {
     return this.userRepository.findOneBy({ id });
   }
 
-  async findByUsername(username: string): Promise<User> {
-    return this.userRepository.findOneBy({ username });
+  async findByEmail(email: string): Promise<User> {
+    return this.userRepository.findOneBy({ email });
   }
 
   /**
@@ -56,7 +59,6 @@ export class UsersService {
       ...updateUserDto,
     };
     return this.userRepository.update(id, user);
-
   }
 
   /**
@@ -68,4 +70,3 @@ export class UsersService {
     return this.userRepository.delete(id);
   }
 }
-
