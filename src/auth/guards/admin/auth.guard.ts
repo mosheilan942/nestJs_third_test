@@ -15,6 +15,7 @@ import { CanActivate, ExecutionContext, Injectable, UnauthorizedException,
           }
           const authToken = authorization.replace(/bearer/gim, '').trim();
           const resp = await this.authService.validateToken(authToken);
+          console.log("resp", resp);
           request.decodedData = resp;
           return true;
         } catch (error) {

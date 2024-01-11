@@ -5,12 +5,6 @@ import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { AuthGuard } from '../../auth/guards/admin/auth.guard';
 
-/**
- * whatever the string pass in controller decorator it will be appended to
- * API URL. to call any API from this controller you need to add prefix which is
- * passed in controller decorator.
- * in our case our base URL is http://localhost:3000/user
- */
 
 @Controller('users')
 export class UsersController {
