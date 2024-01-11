@@ -3,20 +3,18 @@ import {
   ExecutionContext,
   Injectable,
   UnauthorizedException,
-  ForbiddenException,
 } from '@nestjs/common';
 import { AuthService } from '../../services/auth.service';
-
 const chalk = require('chalk');
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(private readonly authService: AuthService) {}
 
-  async canActivate(context: ExecutionContext): Promise<boolean> {
+  canActivate(context: ExecutionContext) {
     try {
       const request = context.switchToHttp().getRequest();
-      const { authorization }: any = request.headers;
+      const { authorization } = request.headers;
       if (!authorization.trim()) {
         throw new UnauthorizedException('Please provide token');
       }
@@ -26,7 +24,7 @@ export class AuthGuard implements CanActivate {
 
       console.log('authToken', authToken);
 
-      const resp = await this.authService.validateToken(authToken);
+      const resp = this.authService.validateToken(authToken);
       request.decodedData = resp;
       return true;
     } catch (error) {

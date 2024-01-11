@@ -36,8 +36,6 @@ export class AuthService {
   }
 
   validateToken(token: string) {
-    return this.jwtServ.verify(token, {
-      secret: process.env.JWT_SECRET_KEY,
-    });
+    return this.jwtServ.verify(token);
   }
 }
