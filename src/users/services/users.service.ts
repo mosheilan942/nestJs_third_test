@@ -4,19 +4,18 @@ import { Repository, UpdateResult } from 'typeorm';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { User } from '../entities/user.entity';
+import { hashPassword } from '../utils/hash';
 
 @Injectable()
 export class UsersService {
-  /**
-   * Here, we have used data mapper approch for this tutorial that is why we
-   * injecting repository here. Another approch can be Active records.
-   */
+  
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) { }
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
     const checkIfExist = await this.findByUsername(createUserDto.username)
+    console.log("checkIfExist", checkIfExist);
     if (checkIfExist) 
     throw new HttpException('user already exist', HttpStatus.OK)
     try {
@@ -24,6 +23,8 @@ export class UsersService {
         ...createUserDto,
         password: createUserDto.password
       };
+      const hash = hashPassword(user.password)
+      user.password = await hash
       return this.userRepository.save(user);
 
     } catch (error) {
@@ -67,3 +68,4 @@ export class UsersService {
     return this.userRepository.delete(id);
   }
 }
+
