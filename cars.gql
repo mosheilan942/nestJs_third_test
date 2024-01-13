@@ -1,0 +1,25 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Car {
+  _id: String!
+  company: String!
+  model: String!
+  type: String!
+}
+
+type Query {
+  cars: [Car!]!
+}
+
+type Mutation {
+  createCar(input: CreateCarInput!): Car!
+  deleteCar(input: String!): Car!
+}
+
+input CreateCarInput {
+  company: String!
+  model: String!
+  type: String!
+}

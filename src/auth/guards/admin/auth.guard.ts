@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { AuthService } from '../../services/auth.service';
-const chalk = require('chalk');
+import * as chalk from 'chalk';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
