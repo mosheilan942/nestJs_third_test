@@ -17,16 +17,10 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
 import { CarsResolver } from './cars/graphql/resolvers/cars.resolver';
 import { CarsModule } from './cars/modules/cars.module';
 
-
-
-
-
-
 @Module({
   imports: [
-
     // configuration
-    ConfigModule.forRoot({isGlobal: true}),
+    ConfigModule.forRoot({ isGlobal: true }),
 
     // caching
     CacheModule.registerAsync(RedisOptions),
@@ -37,7 +31,7 @@ import { CarsModule } from './cars/modules/cars.module';
       host: 'localhost',
       port: 5432,
       password: '3.14159',
-      username: 'postgres',
+      username: 'admin',
       entities: [User],
       database: 'users',
       synchronize: true,
@@ -45,19 +39,19 @@ import { CarsModule } from './cars/modules/cars.module';
     }),
 
     // mongodb connection
-    MongooseModule.forRoot('mongodb://127.0.0.1:27017/test'),
+    MongooseModule.forRoot('mongodb://localhost:27017/test'),
 
     // graphql + apollo playground configuration
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile:'cars.gql',
+      autoSchemaFile: 'cars.gql',
       playground: false,
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
     }),
     // local modules
     UsersModule,
     AuthModule,
-    CarsModule
+    CarsModule,
   ],
   controllers: [UsersController, AppController, CarsController],
   providers: [AppService],
