@@ -18,11 +18,8 @@ export class AuthGuard implements CanActivate {
       if (!authorization.trim()) {
         throw new UnauthorizedException('Please provide token');
       }
-      console.log('authorization', authorization);
 
       const authToken = authorization.replace(/bearer/gim, '').trim();
-
-      console.log('authToken', authToken);
 
       const resp = this.authService.validateToken(authToken);
       request.decodedData = resp;
