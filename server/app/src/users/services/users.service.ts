@@ -47,13 +47,6 @@ export class UsersService {
     return this.userRepository.findOneBy({ email });
   }
 
-  /**
-   * this function is used to updated specific user whose id is passed in
-   * parameter along with passed updated data
-   * @param id is type of number, which represent the id of user.
-   * @param updateUserDto this is partial type of createUserDto.
-   * @returns promise of udpate user
-   */
   updateUser(id: string, updateUserDto: UpdateUserDto): Promise<UpdateResult> {
     const user: UpdateUserDto = {
       ...updateUserDto,
@@ -61,11 +54,6 @@ export class UsersService {
     return this.userRepository.update(id, user);
   }
 
-  /**
-   * this function is used to remove or delete user from database.
-   * @param id is the type of number, which represent id of user
-   * @returns nuber of rows deleted or affected
-   */
   removeUser(id: string): Promise<{ affected?: number }> {
     return this.userRepository.delete(id);
   }

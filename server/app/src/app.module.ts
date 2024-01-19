@@ -16,53 +16,43 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { CarsResolver } from './cars/graphql/resolvers/cars.resolver';
 import { CarsModule } from './cars/modules/cars.module';
+import 'dotenv/config';
 import * as chalk from 'chalk';
 
 export const errorColor = chalk.bold.red;
 export const warningColor = chalk.hex('#FFA500');
 export const successColor = chalk.greenBright;
 
-
-
-
-
-
 @Module({
   imports: [
-
     // configuration
-    ConfigModule.forRoot({isGlobal: true}),
+    ConfigModule.forRoot({ isGlobal: true }),
 
     // caching
     CacheModule.registerAsync(RedisOptions),
 
     // postgres connection
     TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      password: '3.14159',
-      username: 'postgres',
       entities: [User],
-      database: 'users',
+      type: 'postgres',
       synchronize: true,
-      logging: true,
+      url: process.env.CONNECTION_STRING_POSTGRES,
     }),
 
     // mongodb connection
-    MongooseModule.forRoot('mongodb://127.0.0.1:27017/test'),
+    MongooseModule.forRoot(process.env.CONNECTION_STRING_MONGODB),
 
     // graphql + apollo playground configuration
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile:'cars.gql',
+      autoSchemaFile: 'cars.gql',
       playground: false,
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
     }),
     // local modules
     UsersModule,
     AuthModule,
-    CarsModule
+    CarsModule,
   ],
   controllers: [UsersController, AppController, CarsController],
   providers: [AppService],
