@@ -28,7 +28,7 @@ export class AuthService {
     const compare = await comparePassword(passwordFromClient, user.password);
     if (!compare) throw new BadRequestException('User authentication error');
 
-    const payload = { sub: user.id, username: user.username };
+    const payload = { sub: user.id, username: user.username, role:user.role };
     const access_token = {
       access_token: await this.jwtService.signAsync(payload),
     };

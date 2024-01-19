@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { AuthService } from '../../services/auth.service';
-import * as chalk from 'chalk';
+import { errorColor } from "../../../app.module";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -18,17 +18,14 @@ export class AuthGuard implements CanActivate {
       if (!authorization.trim()) {
         throw new UnauthorizedException('Please provide token');
       }
-      console.log('authorization', authorization);
 
       const authToken = authorization.replace(/bearer/gim, '').trim();
-
-      console.log('authToken', authToken);
 
       const resp = this.authService.validateToken(authToken);
       request.decodedData = resp;
       return true;
     } catch (error) {
-      console.log(chalk.red('auth error - ', error.message));
+      console.log(errorColor('auth error - ', error.message));
       return false;
     }
   }

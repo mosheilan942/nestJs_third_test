@@ -21,7 +21,8 @@ import { UsersService } from '../services/users.service';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
 import { UpdateUserDto } from '../dto/update-user.dto';
-import { AuthGuard } from '../../auth/guards/admin/auth.guard';
+import { AuthGuard } from '../../auth/guards/token/auth.guard';
+import { log } from 'console';
 
 @Controller('users')
 export class UsersController {
@@ -34,10 +35,10 @@ export class UsersController {
     return this.usersService.findAllUser();
   }
 
-  @Get()
-  viewUser(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.findByEmail(createUserDto.email);
-  }
+  // @Get()
+  // viewUser(@Body() createUserDto: CreateUserDto) {
+  //   return this.usersService.findByEmail(createUserDto.email);
+  // }
 
   // @UseGuards(AuthGuard)
   @Post('signup')
@@ -68,7 +69,8 @@ export class UsersController {
 
   @UseGuards(AuthGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: string, @Req() request) {
+    console.log(request.decodedData);
     return this.usersService.removeUser(id);
   }
 }

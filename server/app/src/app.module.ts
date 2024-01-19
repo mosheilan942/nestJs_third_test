@@ -16,6 +16,11 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { CarsResolver } from './cars/graphql/resolvers/cars.resolver';
 import { CarsModule } from './cars/modules/cars.module';
+import * as chalk from 'chalk';
+
+export const errorColor = chalk.bold.red;
+export const warningColor = chalk.hex('#FFA500');
+export const successColor = chalk.greenBright;
 
 
 

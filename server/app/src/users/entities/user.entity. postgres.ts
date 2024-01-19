@@ -8,29 +8,16 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'text', nullable:true, unique:true})
+  @Column({ type: 'text', unique:true})
   email: string;
   
-  @Column({ type: 'text', nullable:true })
+  @Column({ type: 'text' })
   password: string;
 
   @Column({ type: 'text', nullable:true, unique:true })
   username: string;
   
-  // @Column({ type: 'text' })
-  // name: string;
+  @Column({ type: 'enum', enum: ['admin', 'user', 'premiumUser'] })
+  role: string;
 
-  // @Column({ type: 'int' })
-  // age: number;
-
-
-  // @Column({ type: 'enum', enum: ['m', 'f'] })
-  // gender: string;
-  /**
-   * m - male
-   * f - female
-   */
-
-  // @Column({ type: 'text', default:"", nullable:true })
-  // refreshToken: string;
 }

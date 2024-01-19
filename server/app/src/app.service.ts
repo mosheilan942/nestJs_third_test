@@ -11,15 +11,6 @@ export class AppService {
     return 'Hello World!';
   }
 
-  // async hset(key: string, field: string, value: string) {
-  //   const stringObject = await this.cacheManager.get<string>(key);
-  //   const object = stringObject
-  //     ? JSON.parse(stringObject!)
-  //     : {};
-  //   object[field] = value;
-  //   await this.cacheManager.set(key, JSON.stringify(object));
-  // }
-
   async getData(): Promise<string | undefined> {
     const value = await this.cacheManager.get<string>('key')    
     return value;
