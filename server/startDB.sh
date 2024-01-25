@@ -6,3 +6,4 @@ sudo systemctl start mongod
 # Start PostgreSQL
 sudo service postgresql start
 echo "All services started!"
+
